@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+        <link rel="stylesheet" href="static/css/uikit.min.css">
+    </head>
+    <body>
+        <div id="content_wrapper" class="uk-container uk-container-center uk-margin-large-top uk-margin-large-bottom">
+
+            <form class="uk-form uk-form-horizontal" action="/dna-translate" method="post">
+                <div class="uk-form-row">
+                    <label class="uk-form-label" for="form-h-it">Sequence</label>
+                    <div class="uk-form-controls">
+                        <textarea name="seq" value="Enter DNA or Protein sequence" rows="5" cols="60"></textarea>
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label" for="form-h-it">Forward Frame</label>
+                    <div class="uk-form-controls">
+                        <label><input type="checkbox" name="fframe" value="1"> 1 </label>&nbsp;
+                        <label><input type="checkbox" name="fframe" value="2"> 2 </label>&nbsp;
+                        <label><input type="checkbox" name="fframe" value="3"> 3 </label>&nbsp;
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <label class="uk-form-label" for="form-h-it">Reverse Frame</label>
+                    <div class="uk-form-controls">
+                        <label><input type="checkbox" name="rframe" value="4"> 4 </label>&nbsp;
+                        <label><input type="checkbox" name="rframe" value="5"> 5 </label>&nbsp;
+                        <label><input type="checkbox" name="rframe" value="6"> 6 </label>&nbsp;
+                    </div>
+                </div>
+                <div class="uk-form-row">
+                    <div class="uk-form-controls">
+                        <input class="uk-button uk-button-large uk-margin-small-top" type="submit" value="Translate">
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </body>
+</html>

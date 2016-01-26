@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+    <link rel="stylesheet" href="static/css/uikit.min.css">
+</head>
+    <body>
+        <div id="content_wrapper" class="uk-container uk-container-center uk-margin-large-top uk-margin-large-bottom">
+            <table class="uk-table uk-table-striped uk-overflow-container">
+            <thead>
+                <tr>
+                    <th>Frame</th>
+                    <th>Translated Sequence</th>
+                </tr>
+            </thead>
+
+            {% for key, value in translated.items() %}
+               <tr>
+                    <th> {{ key }} </th>
+                    <td> {{ value }} </td>
+               </tr>
+            {% endfor %}
+
+            </table>
+        </div>
+    </body>
+</html>
