@@ -1,6 +1,8 @@
-# Simple Python Flask Demo Project #
+# Simple Python Web App Demo Project #
 
 This project consists of a web-form for entering a DNA sequence and selecting frames which the backend will translate and present in a HTML table.
+
+The current version is running on Python Flask as the backend which uses Jinja2 as templating language. A Python-CGI version will follow.
 
 ## Installation ##
 
