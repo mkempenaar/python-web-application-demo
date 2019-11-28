@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request
-from logic import translate_dna
+from flask import Flask, render_template, request, jsonify, make_response
+from logic import translate_dna, generate_random_dna, mutate_dna
 
 app = Flask(__name__)
 
+## Template Rendering ##
 
 @app.route('/')
 def hello_world():
@@ -38,6 +39,37 @@ def process_webform():
     return render_template('translated.html',
                            title="Translated DNA Sequence",
                            translated=translated_seqs)
+
+
+## Data Providers ##
+
+@app.route('/generate-dna', method=['GET'])
+def generate_dna():
+    """ Generates random DNA sequence(s) with a given length 
+    input: number of sequences and the desired length (default 5 and 50)
+    :return: the sequences in a list as JSON """
+    nseq = request.args.get('nseq')
+    length = request.args.get('length')
+
+    sequences = generate_random_dna(nseq, length)
+    return make_response(jsonify(sequences), 200)
+
+@app.route('/mutate-dna', method=['GET'])
+def mutate_dna():
+    """ Mutate DNA sequence(s) given a probability that each base is mutated
+    input: probability in percentage
+    :return: possibly mutated sequence(s) in a list as JSON """
+    prob = request.args.get('prob')
+    sequences = request.args.get('sequences')
+
+    mutated = mutate_dna(sequences, prob)
+    return make_response(jsonify(mutated), 200)
+
+## TODO: add functionality
+@app.route('/some-path', method=['GET'])
+def do_something():
+    pass
+
 
 if __name__ == '__main__':
     app.run()

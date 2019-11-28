@@ -18,3 +18,11 @@ def translate_dna(sequence, frames, reverse=False):
         translated[f] = str(dna.translate())
 
     return translated
+
+def generate_random_dna(nseq, length):
+    ## TODO: implement functionality (see webapp.generate_dna)
+    pass
+
+def mutate_dna(seq, prob):
+    ## TODO: implement functionality (see webapp.mutate_dna)
+    pass
