@@ -1,7 +1,12 @@
-from flask import Flask, render_template, request, jsonify, make_response
-from logic import translate_dna, generate_random_dna, mutate_dna
+#!/usr/bin/env python3
+
+from flask import Flask, render_template, request, jsonify, make_response, redirect
+from logic import translate_dna, generate_random_dna, mutate_dna, get_fasta_stats
+from werkzeug.utils import secure_filename
+import os
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = '/tmp'
 
 ## Template Rendering ##
 
@@ -64,6 +69,20 @@ def mutate_dna():
 
     mutated = mutate_dna(sequences, prob)
     return make_response(jsonify(mutated), 200)
+
+@app.route('/fasta-statistics', method=['POST'])
+def fasta_statistics():
+    """ Calculates basic sequence statistics for each sequence uploaded in a FASTA file """
+    file = request.files['file']
+    # Check if the uploaded file has the correct extension
+    filename, file_extension = os.path.splitext(file.filename)
+    if file_extension.upper() in ['FASTA', 'FA']:
+        filename = secure_filename(file.filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(path)
+        # Process file and get the statistics
+        stats = get_fasta_stats(path)
+
 
 ## TODO: add functionality
 @app.route('/some-path', method=['GET'])

@@ -10,12 +10,12 @@ def translate_dna(sequence, frames, reverse=False):
     """
     translated = {}
 
-    for f in frames:
+    for frame in frames:
         if reverse:
-            dna = Seq(sequence[:-(f-3)]).reverse_complement()
+            dna = Seq(sequence[:-(frame-3)]).reverse_complement()
         else:
-            dna = Seq(sequence[f:])
-        translated[f] = str(dna.translate())
+            dna = Seq(sequence[frame:])
+        translated[frame] = str(dna.translate())
 
     return translated
 
@@ -25,4 +25,8 @@ def generate_random_dna(nseq, length):
 
 def mutate_dna(seq, prob):
     ## TODO: implement functionality (see webapp.mutate_dna)
+    pass
+
+def get_fasta_stats(filename):
+    ## TODO: implement functionality (see webapp.fasta_statistics)
     pass
