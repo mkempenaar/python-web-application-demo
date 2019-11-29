@@ -29,4 +29,4 @@ def mutate_dna(seq, prob):
 
 def get_fasta_stats(filename):
     ## TODO: implement functionality (see webapp.fasta_statistics)
-    pass
+    return dict()
