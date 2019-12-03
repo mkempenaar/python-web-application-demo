@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 
 from flask import Flask, render_template, request, jsonify, make_response, redirect, flash
-from logic import translate_dna, generate_random_dna, mutate_dna, get_fasta_stats
+from logic import translate_dna, generate_random_dna, mutate_dna, calculate_gc_percentage
+from logic import get_fasta_stats, calculate_molecular_weight
 from werkzeug.utils import secure_filename
 import os
 
@@ -51,10 +52,14 @@ def process_webform():
 @app.route('/generate-dna', methods=['GET'])
 def generate_dna():
     """ Generates random DNA sequence(s) with a given length 
-    input: number of sequences and the desired length (default 5 and 50)
-    :return: the sequences in a list as JSON """
-    nseq = request.args.get('nseq')
-    length = request.args.get('length')
+    input: number of sequences and the desired length (default 5 and 60)
+    If 'coding' is true, sequence is an open reading frame
+    :return: the sequences in a list as JSON 
+    usage: http://127.0.0.1/generate-dna?nseq=5&length=100&coding=true
+    """
+    nseq = request.args.get('nseq', default=5)
+    length = request.args.get('length', default=60)
+    coding = request.args.get('coding', default=false)
 
     sequences = generate_random_dna(nseq, length)
     return make_response(jsonify(sequences), 200)
@@ -62,22 +67,30 @@ def generate_dna():
 @app.route('/mutate-dna', methods=['GET'])
 def mutate_dna():
     """ Mutate DNA sequence(s) given a probability that each base is mutated
-    input: probability in percentage
-    :return: possibly mutated sequence(s) in a list as JSON """
+    input: single sequence and probability
+    :return: possibly mutated sequence(s) in a list as JSON 
+    usage: http://127.0.0.1:5000/mutate-dna?prob=0.05&sequence=GTGAGAGAAAAGGCAGAGCTGGGCCAAGGCCCTGCCTCTCCGGGATGGTCTGTGGGGGAGCTGCAGCAGGGAGTG
+    """
     prob = request.args.get('prob')
-    sequences = request.args.get('sequences')
+    sequence = request.args.get('sequence')
 
-    mutated = mutate_dna(sequences, prob)
+    mutated = mutate_dna(sequence, prob)
     return make_response(jsonify(mutated), 200)
 
 @app.route('/fasta-statistics', methods=['POST'])
 def fasta_statistics():
-    """ Calculates basic sequence statistics for each sequence uploaded in a FASTA file """
+    """ Calculates basic sequence statistics for each sequence uploaded in a FASTA file:
+    - GC-percentage
+    - Molecular Weight
+    - Sequence length
+    - ...
+    usage (using curl): 
+        curl -F 'file=@/full/path/to/data/sequences.fa' http://127.0.0.1:5000/fasta-statistics
+    """
     if request.method == 'POST':
         # check if the post request has the file part
         if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
+            return make_response("No FASTA file given", 400)
 
     file = request.files['file']
     # Check if the uploaded file has the correct extension
@@ -90,12 +103,26 @@ def fasta_statistics():
         stats = get_fasta_stats(path)
         return make_response(jsonify(stats), 200)
 
+@app.route('/molecular-weight')
+def molecular_weight():
+    sequence = request.args.get('sequence')
+    weight = calculate_molecular_weight(sequence)
+    return make_response(weight, 200)
+
+@app.route('/gc-percentage')
+def gc_percentage():
+    sequence = request.args.get('sequence')
+    percentage = calculate_gc_percentage(sequence)
+    return make_response(percentage, 200)
+
 
 ## TODO: add functionality
+## Hint: see https://www.bioinformatics.org/sms2/about.html
 @app.route('/some-path', methods=['GET'])
 def do_something():
     pass
 
+# ...
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'

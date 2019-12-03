@@ -1,5 +1,5 @@
 from Bio.Seq import Seq
-
+from Bio.SeqUtils import GC, molecular_weight
 
 def translate_dna(sequence, frames, reverse=False):
     """ Translates a given DNA sequence in the given frames
@@ -29,4 +29,15 @@ def mutate_dna(seq, prob):
 
 def get_fasta_stats(filename):
     ## TODO: implement functionality (see webapp.fasta_statistics)
+    # Hint: use Biopython (see imports)
     return dict()
+
+def calculate_molecular_weight(sequence):
+    ## TODO: implement functionality (see webapp.molecular_weight)
+    # Hint: use Biopython (see imports)
+    return 0
+
+def calculate_gc_percentage(sequence):
+    ## TODO: implement functionality (see webapp.gc_percentage)
+    # Hint: use Biopython (see imports)
+    return 0
