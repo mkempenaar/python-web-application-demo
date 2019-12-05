@@ -1,6 +1,7 @@
 from Bio.Seq import Seq
 from Bio.SeqUtils import GC, molecular_weight
 
+
 def translate_dna(sequence, frames, reverse=False):
     """ Translates a given DNA sequence in the given frames
     :param sequence: String; a DNA sequence
@@ -19,7 +20,7 @@ def translate_dna(sequence, frames, reverse=False):
 
     return translated
 
-def generate_random_dna(nseq, length):
+def generate_random_dna(nseq, length, coding):
     ## TODO: implement functionality (see webapp.generate_dna)
     pass
 
