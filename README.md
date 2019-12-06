@@ -10,8 +10,10 @@ The project depends on the following Python packages, installable using Python *
 
 * Flask
 * Biopython
+* werkzeug
+* json
 
-Install with `pip install flask biopython` or to force Python3 `pip3 install flask biopython` (preferably in a *virtualenv*)
+Install with `pip install flask biopython werkzeug json` or to force Python3 `pip3 install flask biopython` (preferably in a *virtualenv*)
 
 ## Running ##
 
