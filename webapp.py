@@ -110,7 +110,7 @@ def molecular_weight():
 @app.route('/gc-percentage', methods=['POST'])
 def gc_percentage():
     """ Creates a Bokeh plot showing GC-percentages for sequences included in
-    a (multi-)FASTA file. 
+    a (multi-)FASTA file.
     :return: the Bokeh plot object converted to JSON """
     filepath = save_uploaded_file(request, 'file')
     if not filepath:
@@ -153,4 +153,4 @@ def save_uploaded_file(request, form_field):
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
-    app.run()
+    app.run(host='0.0.0.0', debug=True)
