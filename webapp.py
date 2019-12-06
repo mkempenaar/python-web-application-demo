@@ -110,7 +110,8 @@ def molecular_weight():
 @app.route('/gc-percentage', methods=['POST'])
 def gc_percentage():
     """ Creates a Bokeh plot showing GC-percentages for sequences included in
-    a (multi-)FASTA file. """
+    a (multi-)FASTA file. 
+    :return: the Bokeh plot object converted to JSON """
     filepath = save_uploaded_file(request, 'file')
     if not filepath:
         return make_response("No FASTA file given", 400)
@@ -130,7 +131,9 @@ def do_something():
 # Utilities
 
 def save_uploaded_file(request, form_field):
-    """ Saves an uploaded file if it is a FASTA file """
+    """ Saves an uploaded file if it is a FASTA file
+    :form_field: the name of the HTML input field
+    :return: the absolute path to the stored file, False otherwise """
     if request.method == 'POST':
         # check if the post request has the file part
         if form_field not in request.files:
@@ -150,4 +153,4 @@ def save_uploaded_file(request, form_field):
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
-    app.run(debug=True)
+    app.run()
