@@ -43,7 +43,7 @@ def dna_translate_webform():
 
 ## Data Providers ##
 
-@app.route('/dna-translate-data')
+@app.route('/dna-translate-data', methods=['POST'])
 def dna_translate_json():
     """ Receives a DNA sequence and selected frames and performs translation.
     Resulting translation is returned as a JSON string for further processing on the client.
@@ -114,7 +114,7 @@ def molecular_weight():
 def gc_percentage():
     """ Creates a Bokeh plot showing GC-percentages for sequences included in
     a (multi-)FASTA file. """
-    filepath = save_uploaded_file(request, 'file')
+    filepath = save_uploaded_file(request, 'file', ['.FASTA', '.FA'])
     if not filepath:
         return make_response("No FASTA file given", 400)
 
@@ -133,8 +133,8 @@ def do_something():
 ## Utilities ##
 
 
-def save_uploaded_file(request, form_field):
-    """ Saves an uploaded file if it is a FASTA file """
+def save_uploaded_file(request, form_field, supported_extensions):
+    """ Saves an uploaded file, checking for supported file extensions """
     if request.method == 'POST':
         # check if the post request has the file part
         if form_field not in request.files:
@@ -143,7 +143,7 @@ def save_uploaded_file(request, form_field):
     file = request.files[form_field]
     # Check if the uploaded file has the correct extension
     filename, file_extension = os.path.splitext(file.filename)
-    if file_extension.upper() in ['.FASTA', '.FA']:
+    if file_extension.upper() in supported_extensions:
         filename = secure_filename(file.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
@@ -153,7 +153,10 @@ def save_uploaded_file(request, form_field):
 
 
 def translate_sequence(request_data):
-
+    """ Translates a DNA sequence to protein sequence. Requires a single sequence
+    and a number of frames to translate to stored in the request object.
+    :request_data: Flask request object containing form data
+    :return: dictionary containing 'frame:protein sequence' for each selected frame"""
     # Retrieve the entered DNA-sequence (<textarea>)
     sequence = request_data.form.get('seq')
 
@@ -166,8 +169,8 @@ def translate_sequence(request_data):
     translated_forward_seqs = translate_dna(sequence, fframes)
     translated_reverse_seqs = translate_dna(sequence, rframes, reverse=True)
 
-    # Combine dictionaries
-    return {**translated_forward_seqs, **translated_reverse_seqs}
+    # Combine frames
+    return translated_forward_seqs + translated_reverse_seqs
 
 
 if __name__ == '__main__':

@@ -9,14 +9,14 @@ def translate_dna(sequence, frames, reverse=False):
     :param reverse: Bool; whether or not to reverse-complement the sequence before translation
     :return: Dict; a dictionary with frame number as key and the translated sequence as value
     """
-    translated = {}
+    translated = []
 
     for frame in frames:
         if reverse:
             dna = Seq(sequence[:-(frame-3)]).reverse_complement()
         else:
             dna = Seq(sequence[frame:])
-        translated[frame] = str(dna.translate())
+        translated.append((frame, str(dna.translate())))
 
     return translated
 

@@ -1,0 +1,5 @@
+textarea[name=seq-example] {
+    resize: none;
+    overflow: hidden;
+    margin-left: 40px;
+}
