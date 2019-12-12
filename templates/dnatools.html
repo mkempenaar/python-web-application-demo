@@ -18,7 +18,7 @@
             <!-- DNA Translation -->
             <ul class="uk-switcher uk-margin-large-bottom">
                 <li class="uk-active">
-                    <form name="translate-dna" class="uk-form uk-form-horizontal" action="/dna-translate" method="POST">
+                    <form name="translate-dna" class="uk-form uk-form-horizontal" action="#" method="POST">
 
                         <legend class="uk-legend">Translate DNA Sequence</legend>
 
@@ -26,7 +26,7 @@
                             <label class="uk-form-label" for="form-h-it">Sequence</label>
                             <div class="uk-form-controls">
                                 <textarea id="seq" class="uk-textarea"name="seq" value="Enter DNA or Protein sequence" rows="5" cols="60" placeholder="Enter a DNA-sequence"></textarea>
-                                <textarea class="uk-textarea" name="seq-example" rows="5" cols="65" style="resize: none;" disabled>Example DNA-sequence:
+                                <textarea class="uk-textarea" name="seq-example" rows="5" cols="65" style="resize: none;" disabled>Example DNA-sequence (copy/ paste):
                                   ATGCGGTACCCCCAGAGGAAGGGACGGCTAACTACGTGCCAGCACGCCGCGGTAATACGTAGGTCCCGAACGTTGCGCGAAATTACTGGGCGTAAAGGGTCCGTAGGCGGTCTGGTACTT
                                 </textarea>
                             </div>
@@ -49,13 +49,12 @@
                         </div>
                         <div class="uk-form-row">
                             <div class="uk-form-controls">
-                                <input class="uk-button uk-button-large uk-margin-small-top" type="submit" value="Translate - redirect">
-                                <input id="dna-translate-submit-update" class="uk-button uk-button-large uk-margin-small-top" type="submit" value="Translate - update">
+                                <input id="dna-translate-submit-update" class="uk-button uk-button-large uk-margin-small-top" type="submit" value="Translate">
                             </div>
                         </div>
                     </form>
                 </li>
-                <li class="uk-active">
+                <li class="uk-active uk-margin-large-top">
                     <table id="translated-table" class="display" width="60%"></table>
                 </li>
             </ul>

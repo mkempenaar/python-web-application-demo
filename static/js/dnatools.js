@@ -51,7 +51,8 @@ $(function () {
                     ],
                     paging: false,
                     searching: false,
-                    ordering: false
+                    ordering: false,
+                    info: false
                 })
             });
     });

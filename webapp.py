@@ -26,29 +26,27 @@ def dnatools():
     return render_template('dnatools.html', title='Translate DNA Sequence')
 
 
-@app.route('/dna-translate', methods=['POST'])
-def dna_translate_webform():
-    """ Receives a DNA sequence and selected frames and performs translation.
-    The resulting dictionary with 'frame:translated sequence' is passed to the
-    template and rendered as a table.
-    :return: the rendered view containing the result table
-    """
-    translated_seqs = translate_sequence(request)
-
-    # Render result page
-    return render_template('translated.html',
-                           title="Translated DNA Sequence",
-                           translated=translated_seqs)
-
-
 ## Data Providers ##
 
 @app.route('/dna-translate-data', methods=['POST'])
 def dna_translate_json():
     """ Receives a DNA sequence and selected frames and performs translation.
     Resulting translation is returned as a JSON string for further processing on the client.
-    :return: JSON string containing 'frame:protein sequence' for each selected frame """
-    translated_seqs = translate_sequence(request)
+    :return: JSON list containing a '(frame, protein sequence)' tuple for each selected frame """
+    # Retrieve the entered DNA-sequence (<textarea>)
+    sequence = request.form.get('seq')
+
+    # Retrieve the requested frames (<checkbox>; both forward and reverse)
+    # and cast each list element to integer values
+    fframes = [int(frame) for frame in request.form.getlist('fframe')]
+    rframes = [int(frame) for frame in request.form.getlist('rframe')]
+
+    # Translate the sequence with the requested frames
+    translated_forward_seqs = translate_dna(sequence, fframes)
+    translated_reverse_seqs = translate_dna(sequence, rframes, reverse=True)
+
+    # Combine frames
+    translated_seqs = translated_forward_seqs + translated_reverse_seqs
 
     return make_response(jsonify(translated_seqs, 200))
 
@@ -150,27 +148,6 @@ def save_uploaded_file(request, form_field, supported_extensions):
         return path
     
     return False
-
-
-def translate_sequence(request_data):
-    """ Translates a DNA sequence to protein sequence. Requires a single sequence
-    and a number of frames to translate to stored in the request object.
-    :request_data: Flask request object containing form data
-    :return: dictionary containing 'frame:protein sequence' for each selected frame"""
-    # Retrieve the entered DNA-sequence (<textarea>)
-    sequence = request_data.form.get('seq')
-
-    # Retrieve the requested frames (<checkbox>; both forward and reverse)
-    # and cast each list element to integer values
-    fframes = [int(frame) for frame in request_data.form.getlist('fframe')]
-    rframes = [int(frame) for frame in request_data.form.getlist('rframe')]
-
-    # Translate the sequence with the requested frames
-    translated_forward_seqs = translate_dna(sequence, fframes)
-    translated_reverse_seqs = translate_dna(sequence, rframes, reverse=True)
-
-    # Combine frames
-    return translated_forward_seqs + translated_reverse_seqs
 
 
 if __name__ == '__main__':
