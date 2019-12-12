@@ -17,6 +17,7 @@ app.config['UPLOAD_FOLDER'] = '/tmp'
 
 ## Template Rendering ##
 
+
 @app.route('/')
 def dnatools():
     """ Renders the DNA tools web form
@@ -24,27 +25,15 @@ def dnatools():
     """
     return render_template('dnatools.html', title='Translate DNA Sequence')
 
+
 @app.route('/dna-translate', methods=['POST'])
-def process_webform():
+def dna_translate_webform():
     """ Receives a DNA sequence and selected frames and performs translation.
     The resulting dictionary with 'frame:translated sequence' is passed to the
     template and rendered as a table.
     :return: the rendered view containing the result table
     """
-    # Retrieve the entered DNA-sequence (<textarea>)
-    sequence = request.form.get('seq')
-
-    # Retrieve the requested frames (<checkbox>; both forward and reverse)
-    # and cast each list element to integer values
-    fframes = [int(frame) for frame in request.form.getlist('fframe')]
-    rframes = [int(frame) for frame in request.form.getlist('rframe')]
-
-    # Translate the sequence with the requested frames
-    translated_forward_seqs = translate_dna(sequence, fframes)
-    translated_reverse_seqs = translate_dna(sequence, rframes, reverse=True)
-
-    # Combine dictionaries
-    translated_seqs = {**translated_forward_seqs, **translated_reverse_seqs}
+    translated_seqs = translate_sequence(request)
 
     # Render result page
     return render_template('translated.html',
@@ -53,6 +42,16 @@ def process_webform():
 
 
 ## Data Providers ##
+
+@app.route('/dna-translate-data')
+def dna_translate_json():
+    """ Receives a DNA sequence and selected frames and performs translation.
+    Resulting translation is returned as a JSON string for further processing on the client.
+    :return: JSON string containing 'frame:protein sequence' for each selected frame """
+    translated_seqs = translate_sequence(request)
+
+    return make_response(jsonify(translated_seqs, 200)
+
 
 @app.route('/generate-dna', methods=['GET'])
 def generate_dna():
@@ -69,6 +68,7 @@ def generate_dna():
     sequences = generate_random_dna(nseq, length, coding)
     return make_response(jsonify(sequences), 200)
 
+
 @app.route('/mutate-dna', methods=['GET'])
 def mutate_dna_sequence():
     """ Mutate DNA sequence(s) given a probability that each base is mutated
@@ -81,6 +81,7 @@ def mutate_dna_sequence():
 
     mutated = mutate_dna(sequence, prob)
     return make_response(jsonify(mutated), 200)
+
 
 @app.route('/fasta-statistics', methods=['POST'])
 def fasta_statistics():
@@ -100,12 +101,14 @@ def fasta_statistics():
     stats = get_fasta_stats(filepath)
     return make_response(jsonify(stats), 200)
 
+
 @app.route('/molecular-weight', methods=['GET'])
 def molecular_weight():
     """ Calculates the molecular weight of a single-strand DNA sequence """
     sequence = request.args.get('sequence')
     weight = calculate_molecular_weight(sequence)
     return make_response(weight, 200)
+
 
 @app.route('/gc-percentage', methods=['POST'])
 def gc_percentage():
@@ -127,7 +130,8 @@ def do_something():
     """ Rename the route and method name followed by adding logic """
     pass
 
-# Utilities
+## Utilities ##
+
 
 def save_uploaded_file(request, form_field):
     """ Saves an uploaded file if it is a FASTA file """
@@ -146,6 +150,24 @@ def save_uploaded_file(request, form_field):
         return path
     
     return False
+
+
+def translate_sequence(request_data):
+
+    # Retrieve the entered DNA-sequence (<textarea>)
+    sequence = request_data.form.get('seq')
+
+    # Retrieve the requested frames (<checkbox>; both forward and reverse)
+    # and cast each list element to integer values
+    fframes = [int(frame) for frame in request_data.form.getlist('fframe')]
+    rframes = [int(frame) for frame in request_data.form.getlist('rframe')]
+
+    # Translate the sequence with the requested frames
+    translated_forward_seqs = translate_dna(sequence, fframes)
+    translated_reverse_seqs = translate_dna(sequence, rframes, reverse=True)
+
+    # Combine dictionaries
+    return {**translated_forward_seqs, **translated_reverse_seqs}
 
 
 if __name__ == '__main__':
