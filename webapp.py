@@ -50,7 +50,7 @@ def dna_translate_json():
     :return: JSON string containing 'frame:protein sequence' for each selected frame """
     translated_seqs = translate_sequence(request)
 
-    return make_response(jsonify(translated_seqs, 200)
+    return make_response(jsonify(translated_seqs, 200))
 
 
 @app.route('/generate-dna', methods=['GET'])
