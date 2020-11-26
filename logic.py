@@ -1,3 +1,6 @@
+"""
+I actualy don't know what it does
+"""
 from Bio.Seq import Seq
 from Bio.SeqUtils import GC, molecular_weight
 
