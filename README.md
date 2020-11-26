@@ -11,9 +11,9 @@ The project depends on the following Python packages, installable using Python *
 * Flask
 * Biopython
 * werkzeug
-* json
+* JSON
 
-what is this? magic?
+what is this? magic? Yes!
 nah
 just a readme
 
