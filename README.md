@@ -13,10 +13,6 @@ The project depends on the following Python packages, installable using Python *
 * werkzeug
 * JSON
 
-what is this? magic? Yes!
-nah
-just a readme
-
 Install with `pip install flask biopython werkzeug json` or to force Python3 `pip3 install flask biopython` (preferably in a *virtualenv*)
 
 ## Running ##
