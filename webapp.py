@@ -121,6 +121,14 @@ def gc_percentage():
     return json.dumps(json_item(plot))
 
 
+@app.route('/get_details', methods=['GET'])
+def get_details():
+    source = request.args.get('source')
+    index = request.args.get('index')
+    print(source, index)
+    return make_response(jsonify("Source ({}) and Index ({}) received.".format(source, index)), 200)
+
+
 ## TODO: add functionality
 ## Hint: see https://www.bioinformatics.org/sms2/about.html
 @app.route('/some-path', methods=['GET'])
