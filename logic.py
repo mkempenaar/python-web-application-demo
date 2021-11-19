@@ -14,6 +14,8 @@ def translate_dna(sequence, frames, reverse=False):
     """
     translated = {}
 
+    sequence += 'N' * (len(sequence) % 3)
+
     for frame in frames:
         if reverse:
             dna = Seq(sequence[:-(frame-3)]).reverse_complement()
