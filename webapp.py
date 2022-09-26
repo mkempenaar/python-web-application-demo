@@ -161,4 +161,4 @@ def save_uploaded_file(request, form_field):
 
 if __name__ == '__main__':
     app.secret_key = 'super secret key'
-    app.run(host='0.0.0.0', debug=True)
+    app.run(host='127.0.0.1', debug=True)
